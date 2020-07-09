@@ -1,21 +1,58 @@
 import React, { Component } from "react";
+import AuthenticationService from '../../../api/user/AuthenticationService.js'
+import TaskService from '../../../api/todo/TaskService.js'
 
 class ListTodoComponent extends Component {
     constructor(props) {
         super(props)
         this.state = {
-            todos: [
-                { id: 1, description: 'Learn React', done: false, targetDate: new Date() },
-                { id: 2, description: 'Learn Spring', done: false, targetDate: new Date() },
-                { id: 3, description: 'Learn Docker', done: false, targetDate: new Date() },
-                { id: 4, description: 'Learn AOP', done: false, targetDate: new Date() },
-            ]
+            todos: [],
+            message: ''
         }
+        this.refreshTask = this.refreshTask.bind(this)
+        this.removeTask = this.removeTask.bind(this)
     }
+    componentWillUnmount() {
+
+
+    }
+
+    shouldComponentUpdate(nextProps, nextState) {
+
+        return true
+    }
+    
+    componentDidMount() {
+        this.refreshTask()
+    }
+    
+    refreshTask() {
+        TaskService.getTasks(AuthenticationService.getLogeduserId())
+            .then(
+                res => {
+                    this.setState({
+                        todos: res.data
+                    })
+                }
+            );
+    }
+    
+    removeTask(id) {
+        TaskService.deleteTask(id)
+            .then(task => console.log(task))
+        this.refreshTask()
+    }
+    
+    updateTask(id) {
+        TaskService.updateTask(id).then()
+
+    }
+
     render() {
         return (
             <div className="container ">
                 <h1>List To Do's</h1>
+                <h1>{this.state.message}</h1>
                 <div>
                     <table className="table">
                         <thead>
@@ -23,6 +60,8 @@ class ListTodoComponent extends Component {
                                 <th>Description</th>
                                 <th>Is Complete?</th>
                                 <th>date</th>
+                                <th>Update</th>
+                                <th>delete</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -31,6 +70,8 @@ class ListTodoComponent extends Component {
                                     <td>{task.description}</td>
                                     <td>{task.done.toString()}</td>
                                     <td>{task.targetDate.toString()}</td>
+                                    <td><button className="btn btn warning" onClick={() => this.updateTask(task.id)}>Update</button></td>
+                                    <td><button className="btn btn warning" onClick={() => this.removeTask(task.id)}>Delete</button></td>
                                 </tr>
                             )}
 
@@ -40,6 +81,8 @@ class ListTodoComponent extends Component {
             </div>
         )
     }
+
 }
+
 
 export default ListTodoComponent

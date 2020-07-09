@@ -26,7 +26,6 @@ class TodoApp extends Component {
                     </Switch>
                     <FooterComponent />
                 </Router>
-
             </div>
         );
     }
