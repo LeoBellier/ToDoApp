@@ -8,6 +8,10 @@ class TaskService {
         return axios.get(`http://localhost:8080/rest/task/${id}`);
     }
 
+    updateTask(id) {
+        return axios.get(`http://localhost:8080/rest/task/${id}`);
+    }
+
     deleteTask(id) {
         return axios.delete(`http://localhost:8080/rest/users/tasks/d/${id}`);
     }

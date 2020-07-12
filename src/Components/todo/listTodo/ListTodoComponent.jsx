@@ -18,7 +18,8 @@ class ListTodoComponent extends Component {
     }
 
     shouldComponentUpdate(nextProps, nextState) {
-
+        console.log(nextProps)
+        console.log(nextState)
         return true
     }
     
